@@ -2,9 +2,13 @@ package pacman2;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import javax.swing.ImageIcon;
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Paths;
 
-public class Pacman extends Laberinto{
+import javax.imageio.ImageIO;
+
+public class Pacman extends Laberinto {
 
 	
 	int pacmanx = 2 * blocksize;
@@ -27,22 +31,26 @@ public class Pacman extends Laberinto{
 	private Image pacman2up, pacman2down, pacman2left, pacman2right;
 	private Image pacman3up, pacman3down, pacman3left, pacman3right;
 
+	public Pacman() {
+		cargarImagenes();
+	}
+
 	
-	private void cargarImagen() {
-		pacman = new ImageIcon(getClass().getResource("../sprites/pacman.png")).getImage();
-		pacman1 = new ImageIcon(getClass().getResource("../sprites/pacman1.png")).getImage();
-		pacman1up = new ImageIcon(getClass().getResource("../sprites/up1.png")).getImage();
-		pacman2up = new ImageIcon(getClass().getResource("../sprites/up2.png")).getImage();
-		pacman3up = new ImageIcon(getClass().getResource("../sprites/up3.png")).getImage();
-		pacman1down = new ImageIcon(getClass().getResource("../sprites/down1.png")).getImage();
-		pacman2down = new ImageIcon(getClass().getResource("../sprites/down2.png")).getImage();
-		pacman3down = new ImageIcon(getClass().getResource("../sprites/down3.png")).getImage();
-		pacman1left = new ImageIcon(getClass().getResource("../sprites/left1.png")).getImage();
-		pacman2left = new ImageIcon(getClass().getResource("../sprites/left2.png")).getImage();
-		pacman3left = new ImageIcon(getClass().getResource("../sprites/left3.png")).getImage();
-		pacman1right = new ImageIcon(getClass().getResource("../sprites/right1.png")).getImage();
-		pacman2right = new ImageIcon(getClass().getResource("../sprites/right2.png")).getImage();
-		pacman3right = new ImageIcon(getClass().getResource("../sprites/right3.png")).getImage();
+	private void cargarImagenes() {
+		pacman = loadImage("sprites/pacman.png");
+		pacman1 = loadImage("sprites/pacman1.png");
+		pacman1up = loadImage("sprites/up1.png");
+		pacman2up = loadImage("sprites/up2.png");
+		pacman3up = loadImage("sprites/up3.png");
+		pacman1down = loadImage("sprites/down1.png");
+		pacman2down = loadImage("sprites/down2.png");
+		pacman3down = loadImage("sprites/down3.png");
+		pacman1left = loadImage("sprites/left1.png");
+		pacman2left = loadImage("sprites/left2.png");
+		pacman3left = loadImage("sprites/left3.png");
+		pacman1right = loadImage("sprites/right1.png");
+		pacman2right = loadImage("sprites/right2.png");
+		pacman3right = loadImage("sprites/right3.png");
 	}
 
 	void moverPacman() { 
@@ -94,7 +102,6 @@ public class Pacman extends Laberinto{
 	
 	
 	void paint(Graphics2D g2d) {
-		cargarImagen();
 		hacerAnimacion();
 		dibujarPacman(g2d);
 	}
@@ -197,9 +204,15 @@ public class Pacman extends Laberinto{
 			break;
 		}
 	}
-
 	
-
-	
+	private Image loadImage(String resourceName) {
+		try {
+			URI uri = ClassLoader.getSystemResource(resourceName).toURI();
+			String mainPath = Paths.get(uri).toString();
+			return ImageIO.read(new File(mainPath));
+		} catch (Exception e1) {
+			throw new RuntimeException(e1);
+		}
+	}
 	
 }

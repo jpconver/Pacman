@@ -11,17 +11,13 @@ public class IniciarJuego {
 		ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		ventana.setLocationRelativeTo(null);
 		ventana.setResizable(false);
-		Juego juego = new Juego();
-		juego.laberinto.iniciarNivel();
+		Juego juego = new Juego(500,500);
+		juego.getLaberinto().iniciarNivel();
 		ventana.add(juego);
 		ventana.addKeyListener(juego);
-		while(true) {
-			juego.mover();
-			juego.repaint();
-			Thread.sleep(10);
-		}
-		
-		
+		ventana.pack();
+		Thread threadJuego = new Thread(juego);
+		threadJuego.start();
 	}
 
 }

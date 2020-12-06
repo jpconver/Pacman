@@ -1,17 +1,32 @@
 package pacman2;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
-public class Juego extends JPanel implements KeyListener{
+public class Juego extends JPanel implements KeyListener, Runnable {
 	private static final long serialVersionUID = 1L;
 	
-	Pacman pacman = new Pacman();
-	Laberinto laberinto = new Laberinto();
+	private Pacman pacman;
+	private Laberinto laberinto;
+	private int anchoJuego;
+	private int largoJuego;
+
+	public Juego(int anchoJuego, int largoJuego) {
+		this.pacman = new Pacman();
+		this.laberinto = new Laberinto();
+		this.anchoJuego = anchoJuego;
+		this.largoJuego = largoJuego;
+	}
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(anchoJuego, largoJuego);
+    }
 	
 	protected void mover() {
 		pacman.moverPacman();
@@ -62,5 +77,22 @@ public class Juego extends JPanel implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
+	}
+
+	public Laberinto getLaberinto() {
+		return laberinto;
+	}
+
+	@Override
+	public void run() {
+		while(true) {
+			mover();
+			repaint();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
