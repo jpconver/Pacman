@@ -11,8 +11,7 @@ public class IniciarJuego {
 		ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		ventana.setLocationRelativeTo(null);
 		ventana.setResizable(false);
-		Juego juego = new Juego(500,500);
-		juego.getLaberinto().iniciarNivel();
+		Juego juego = new Juego(500,530);
 		ventana.add(juego);
 		ventana.addKeyListener(juego);
 		ventana.pack();

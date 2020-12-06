@@ -33,9 +33,9 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		super.paint(g2d);
+		super.paintComponent(g2d);
 		setBackground(Color.black);
 		laberinto.dibujarLaberinto(g2d);
 		pacman.paint(g2d);
@@ -44,28 +44,24 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-			pacman.reqdx = -3;
+			pacman.reqdx = -1;
 			pacman.reqdy = 0;
-			pacman.viewdx = -1;
-			pacman.viewdy = 0;
+
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-			pacman.reqdx = 3;
+			pacman.reqdx = 1;
 			pacman.reqdy = 0;
-			pacman.viewdx = 1;
-			pacman.viewdy = 0;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-			pacman.reqdy = -3;
-			pacman.reqdx = 0;
-			pacman.viewdy = 1;
-			pacman.viewdx = 0;
+
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-			pacman.reqdy = 3;
+			pacman.reqdy = 1;
 			pacman.reqdx = 0;
-			pacman.viewdy = -1;
-			pacman.viewdx = 0;
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+			pacman.reqdy = -1;
+			pacman.reqdx = 0;
+
 		}
 	}
 

@@ -8,21 +8,22 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-public class Pacman extends Laberinto {
+public class Pacman extends Laberinto{
 
 	
-	int pacmanx = 2 * blocksize;
-	int pacmany = 11 * blocksize;
+	int pacmanx = 7 * blocksize;
+	int pacmany = 10 * blocksize;
 	int reqdx = 0;
 	int reqdy = 0;
 	int pacmandx = 0;
 	int pacmandy = 0;
 	int viewdx = 0;
 	int viewdy = 0;
-	int pacmanspeed = 6;
+	int pacmanspeed = 3;
+	int i = 0;
 	
-	private final int pacmandelay = 3;
-	private final int pacmananimcount = 4;
+	private final int pacmandelay = 4;
+	private final int PacmanCantSprites = 4;
 	private int pacanimcount = pacmandelay;
 	private int pacanimdir = 1;
 	private int pacmaninicial = 0;
@@ -54,6 +55,49 @@ public class Pacman extends Laberinto {
 	}
 
 	void moverPacman() { 
+		
+		int pos;
+		short ch;
+		if (reqdx == -pacmandx && reqdy == -pacmandy) {
+            pacmandx = reqdx;
+            pacmandy = reqdy;
+            viewdx = pacmandx;
+            viewdy = pacmandy;
+        }
+		
+		if (pacmanx % blocksize == 0 && pacmany % blocksize == 0) {
+            pos = pacmanx / blocksize + nrofblocks * (int) (pacmany / blocksize);
+            ch = getScreendata()[pos];
+            
+            if ((ch & 16) != 0) {
+            	System.out.println("Dot comido " + i);
+            	
+                datosLaberinto[pos] = (short) (datosLaberinto[pos] - 16);
+                i++;
+            }
+            if (reqdx != 0 || reqdy != 0) {
+                if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0)
+                        || (reqdx == 1 && reqdy == 0 && (ch & 4) != 0)
+                        || (reqdx == 0 && reqdy == -1 && (ch & 2) != 0)
+                        || (reqdx == 0 && reqdy == 1 && (ch & 8) != 0))) {
+                    pacmandx = reqdx;
+                    pacmandy = reqdy;
+                    viewdx = pacmandx;
+                    viewdy = pacmandy;
+                }
+            }
+            if ((pacmandx == -1 && pacmandy == 0 && (ch & 1) != 0)
+                || (pacmandx == 1 && pacmandy == 0 && (ch & 4) != 0)
+                || (pacmandx == 0 && pacmandy == -1 && (ch & 2) != 0)
+                || (pacmandx == 0 && pacmandy == 1 && (ch & 8) != 0)) {
+            pacmandx = 0;
+            pacmandy = 0;
+            }
+		}
+		pacmanx = pacmanx + pacmanspeed * pacmandx;
+        pacmany = pacmany + pacmanspeed * pacmandy;
+		
+		/*
 		int pos;
 		short ch;
 		
@@ -64,15 +108,17 @@ public class Pacman extends Laberinto {
             viewdx = pacmandx;
             viewdy = pacmandy;
         }
-/*
+
         if (pacmanx % blocksize == 0 && pacmany % blocksize == 0) {
             pos = pacmanx / blocksize + nrofblocks * (int) (pacmany / blocksize);
             ch = screendata[pos];
+        
 
             if ((ch & 16) != 0) {
                 screendata[pos] = (short) (ch & 15);
-                //score++;
+                score++;
             }
+            
 
             if (reqdx != 0 || reqdy != 0) {
                 if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0)
@@ -85,6 +131,7 @@ public class Pacman extends Laberinto {
                     viewdy = pacmandy;
                 }
             }
+        
 
             // Check for standstill
             if ((pacmandx == -1 && pacmandy == 0 && (ch & 1) != 0)
@@ -97,7 +144,7 @@ public class Pacman extends Laberinto {
         }
         pacmanx = pacmanx + pacmanspeed * pacmandx;
         pacmany = pacmany + pacmanspeed * pacmandy;
-        */
+       */ 
     }
 	
 	
@@ -114,7 +161,7 @@ public class Pacman extends Laberinto {
 			pacanimcount = pacmandelay;
 			pacmaninicial = pacmaninicial + pacanimdir;
 
-			if (pacmaninicial == (pacmananimcount - 1) || pacmaninicial == 0) {
+			if (pacmaninicial == (PacmanCantSprites - 1) || pacmaninicial == 0) {
 				pacanimdir = -pacanimdir;
 			}
 		}
@@ -125,9 +172,9 @@ public class Pacman extends Laberinto {
 			dibujarPacmanIzq(g2d);
 		} else if (viewdx == 1) {
 			dibujarPacmanDer(g2d);
-		} else if (viewdy == 1) {
-			dibujarPacmanArriba(g2d);
 		} else if (viewdy == -1) {
+			dibujarPacmanArriba(g2d);
+		} else if (viewdy == 1) {
 			dibujarPacmanAbajo(g2d);
 		} else {
 			g2d.drawImage(pacman, pacmanx, pacmany, null);
