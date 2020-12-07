@@ -1,5 +1,4 @@
 package pacman2;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,30 +14,55 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private Laberinto laberinto;
 	private int anchoJuego;
 	private int largoJuego;
+	private Sonidos sonidos;
+	private int cantVidas;
+	@SuppressWarnings("unused")
+	private int cantidadFantasmas;
+	private int[] screendata = new int[256];
+	
+	
 
-	public Juego(int anchoJuego, int largoJuego) {
-		this.pacman = new Pacman();
-		this.laberinto = new Laberinto();
+	public Juego(int anchoJuego, int largoJuego, int vidas, int fantasmas) {
+		this.laberinto = new Laberinto(screendata);
 		this.anchoJuego = anchoJuego;
 		this.largoJuego = largoJuego;
+		this.cantVidas = vidas;
+		this.cantidadFantasmas = fantasmas;
+		
+		iniciarVariables();
+		cargarSonidos();
+		iniciarJuego();
 	}
 
-    @Override
+    private void iniciarVariables() {
+    	for (int i = 0; i<laberinto.datosLaberinto.length; i++) {
+		screendata[i] = laberinto.datosLaberinto[i];
+    	}
+	}
+
+	@Override
     public Dimension getPreferredSize() {
         return new Dimension(anchoJuego, largoJuego);
     }
 	
-	protected void mover() {
-		pacman.moverPacman();
+    private void iniciarJuego() {
+    	this.pacman = new Pacman(cantVidas, screendata);
+    	sonidos.repetirSonido("music");
+    }
+    
+	protected void actualizarJuego() {
+		pacman.moverse();
 	}
+
 
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
 		setBackground(Color.black);
-		laberinto.dibujarLaberinto(g2d);
 		pacman.paint(g2d);
+		laberinto.dibujarLaberinto(g2d);
+		pacman.drawScore(g2d);
 	}
 
 	@Override
@@ -46,7 +70,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			pacman.reqdx = -1;
 			pacman.reqdy = 0;
-
+			
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			pacman.reqdx = 1;
@@ -82,7 +106,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			mover();
+			actualizarJuego();
 			repaint();
 			try {
 				Thread.sleep(10);
@@ -91,4 +115,13 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			}
 		}
 	}
+	
+	private void cargarSonidos() {
+        try {
+            sonidos = new Sonidos();
+            sonidos.agregarSonido("music", "sounds/pacman-theme.wav");
+        } catch (Exception e1) {
+            throw new RuntimeException(e1);
+        }
+    }
 }

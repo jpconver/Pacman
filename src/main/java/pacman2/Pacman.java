@@ -1,63 +1,74 @@
 package pacman2;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Paths;
 
-import javax.imageio.ImageIO;
 
-public class Pacman extends Laberinto{
+public class Pacman extends Laberinto {
 
 	
-	int pacmanx = 7 * blocksize;
-	int pacmany = 10 * blocksize;
-	int reqdx = 0;
-	int reqdy = 0;
-	int pacmandx = 0;
-	int pacmandy = 0;
-	int viewdx = 0;
-	int viewdy = 0;
-	int pacmanspeed = 3;
-	int i = 0;
+	int pacmanx = 7 * blocksize;	//Posicion Pacman
+	int pacmany = 10 * blocksize;	//Posicion Pacman
+	int reqdx = 0;	//Direccion de movimiento pacman
+	int reqdy = 0;	//Direccion de movimiento pacman
+	int pacmandx = 0; //Direccion de movimiento pacman
+	int pacmandy = 0; //Direccion de movimiento pacman
+	int viewdx = 0;	//Direcion a la que mira el pacman
+	int viewdy = 0; //Dirrecion a la que mira el pacman
+	int pacmanspeed = 2;
 	
+	Sonidos sonidos;
+	int vidas;
+	private int score = 0;
 	private final int pacmandelay = 4;
 	private final int PacmanCantSprites = 4;
 	private int pacanimcount = pacmandelay;
 	private int pacanimdir = 1;
 	private int pacmaninicial = 0;
+	private final Font smallfont = new Font("Helvetica", Font.BOLD, 14);
 	
-	private Image pacman, pacman1, pacman1up, pacman1left, pacman1right, pacman1down;
-	private Image pacman2up, pacman2down, pacman2left, pacman2right;
-	private Image pacman3up, pacman3down, pacman3left, pacman3right;
-
-	public Pacman() {
+	
+	public Pacman(int cantVidas, int[] screendata2) {
+		super(screendata2);
 		cargarImagenes();
+		this.vidas = cantVidas;
+		cargarSonidos();
 	}
+	private void cargarSonidos() {
+        try {
+            sonidos = new Sonidos();
+            sonidos.agregarSonido("eat-dot", "sounds/eating-dot.wav");
+            sonidos.agregarSonido("eat-cherry", "sounds/eating-cherry.wav");
+        } catch (Exception e1) {
+            throw new RuntimeException(e1);
+        }
+    }
 
-	
+
 	private void cargarImagenes() {
-		pacman = loadImage("sprites/pacman.png");
-		pacman1 = loadImage("sprites/pacman1.png");
-		pacman1up = loadImage("sprites/up1.png");
-		pacman2up = loadImage("sprites/up2.png");
-		pacman3up = loadImage("sprites/up3.png");
-		pacman1down = loadImage("sprites/down1.png");
-		pacman2down = loadImage("sprites/down2.png");
-		pacman3down = loadImage("sprites/down3.png");
-		pacman1left = loadImage("sprites/left1.png");
-		pacman2left = loadImage("sprites/left2.png");
-		pacman3left = loadImage("sprites/left3.png");
-		pacman1right = loadImage("sprites/right1.png");
-		pacman2right = loadImage("sprites/right2.png");
-		pacman3right = loadImage("sprites/right3.png");
+			pacman = Imagenes.loadImage("sprites/pacman.png");
+			pacman1 = Imagenes.loadImage("sprites/pacman1.png");
+			pacman1up = Imagenes.loadImage("sprites/up1.png");
+			pacman2up = Imagenes.loadImage("sprites/up2.png");
+			pacman3up = Imagenes.loadImage("sprites/up3.png");
+			pacman1down = Imagenes.loadImage("sprites/down1.png");
+			pacman2down = Imagenes.loadImage("sprites/down2.png");
+			pacman3down = Imagenes.loadImage("sprites/down3.png");
+			pacman1left = Imagenes.loadImage("sprites/left1.png");
+			pacman2left = Imagenes.loadImage("sprites/left2.png");
+			pacman3left = Imagenes.loadImage("sprites/left3.png");
+			pacman1right = Imagenes.loadImage("sprites/right1.png");
+			pacman2right = Imagenes.loadImage("sprites/right2.png");
+			pacman3right = Imagenes.loadImage("sprites/right3.png");
+			//cereza = loadImage("sprites/cereza.png");
 	}
 
-	void moverPacman() { 
-		
+	public void moverse() {
 		int pos;
-		short ch;
+		int ch;
+		
+		
 		if (reqdx == -pacmandx && reqdy == -pacmandy) {
             pacmandx = reqdx;
             pacmandy = reqdy;
@@ -67,13 +78,18 @@ public class Pacman extends Laberinto{
 		
 		if (pacmanx % blocksize == 0 && pacmany % blocksize == 0) {
             pos = pacmanx / blocksize + nrofblocks * (int) (pacmany / blocksize);
-            ch = getScreendata()[pos];
+            ch = screendata[pos];
             
             if ((ch & 16) != 0) {
-            	System.out.println("Dot comido " + i);
-            	
-                datosLaberinto[pos] = (short) (datosLaberinto[pos] - 16);
-                i++;
+            	screendata[pos] = (short) (screendata[pos] - 16);
+                score++;
+                sonidos.tocarSonido("eat-dot");
+            }
+            
+            if ((ch & 32) != 0) {
+            	screendata[pos] = (short) (screendata[pos] - 32);
+                score += 20;
+                sonidos.tocarSonido("eat-cherry");
             }
             if (reqdx != 0 || reqdy != 0) {
                 if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0)
@@ -96,56 +112,9 @@ public class Pacman extends Laberinto{
 		}
 		pacmanx = pacmanx + pacmanspeed * pacmandx;
         pacmany = pacmany + pacmanspeed * pacmandy;
-		
-		/*
-		int pos;
-		short ch;
-		
-		
-        if (reqdx == -pacmandx && reqdy == -pacmandy) {
-            pacmandx = reqdx;
-            pacmandy = reqdy;
-            viewdx = pacmandx;
-            viewdy = pacmandy;
-        }
-
-        if (pacmanx % blocksize == 0 && pacmany % blocksize == 0) {
-            pos = pacmanx / blocksize + nrofblocks * (int) (pacmany / blocksize);
-            ch = screendata[pos];
         
-
-            if ((ch & 16) != 0) {
-                screendata[pos] = (short) (ch & 15);
-                score++;
-            }
-            
-
-            if (reqdx != 0 || reqdy != 0) {
-                if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0)
-                        || (reqdx == 1 && reqdy == 0 && (ch & 4) != 0)
-                        || (reqdx == 0 && reqdy == -1 && (ch & 2) != 0)
-                        || (reqdx == 0 && reqdy == 1 && (ch & 8) != 0))) {
-                    pacmandx = reqdx;
-                    pacmandy = reqdy;
-                    viewdx = pacmandx;
-                    viewdy = pacmandy;
-                }
-            }
-        
-
-            // Check for standstill
-            if ((pacmandx == -1 && pacmandy == 0 && (ch & 1) != 0)
-                    || (pacmandx == 1 && pacmandy == 0 && (ch & 4) != 0)
-                    || (pacmandx == 0 && pacmandy == -1 && (ch & 2) != 0)
-                    || (pacmandx == 0 && pacmandy == 1 && (ch & 8) != 0)) {
-                pacmandx = 0;
-                pacmandy = 0;
-            }
-        }
-        pacmanx = pacmanx + pacmanspeed * pacmandx;
-        pacmany = pacmany + pacmanspeed * pacmandy;
-       */ 
     }
+	
 	
 	
 	void paint(Graphics2D g2d) {
@@ -182,7 +151,6 @@ public class Pacman extends Laberinto{
 	}
 	
 	private void dibujarPacmanIzq(Graphics2D g2d) {
-
 		switch (pacmaninicial) {
 		case 1:
 			g2d.drawImage(pacman1left, pacmanx, pacmany, null);
@@ -252,14 +220,19 @@ public class Pacman extends Laberinto{
 		}
 	}
 	
-	private Image loadImage(String resourceName) {
-		try {
-			URI uri = ClassLoader.getSystemResource(resourceName).toURI();
-			String mainPath = Paths.get(uri).toString();
-			return ImageIO.read(new File(mainPath));
-		} catch (Exception e1) {
-			throw new RuntimeException(e1);
-		}
-	}
+	void drawScore(Graphics2D g) {
+		int i = 0;
+		g.setFont(smallfont);
+        g.setColor(Color.yellow);
+		g.drawString("Vidas restantes: ", 15 + i * 30, scrsize + 13);
+		g.setColor(Color.green);
+    	for (i = 0; i < vidas; i++) {
+            g.drawImage(pacman2left, i*30 + 15, scrsize + 15,null);
+    	}
+        g.drawString("Puntuación: " + score, scrsize / 2 + 96, scrsize + 16);
+    }
+	
+	
+
 	
 }

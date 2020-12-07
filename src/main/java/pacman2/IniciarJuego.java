@@ -5,13 +5,15 @@ import javax.swing.WindowConstants;
 public class IniciarJuego {
 
 	public static void main(String[] args) throws InterruptedException {
+		int vidas = 3;
+		int fantasmas = 4;
 		JFrame ventana = new JFrame("Pacman 2.0");
 		ventana.setSize(500, 500);
 		ventana.setVisible(true);
 		ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		ventana.setLocationRelativeTo(null);
 		ventana.setResizable(false);
-		Juego juego = new Juego(500,530);
+		Juego juego = new Juego(500,530, vidas, fantasmas);
 		ventana.add(juego);
 		ventana.addKeyListener(juego);
 		ventana.pack();
