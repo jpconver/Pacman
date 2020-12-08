@@ -13,7 +13,7 @@ public class IniciarJuego {
 		ventana.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		ventana.setLocationRelativeTo(null);
 		ventana.setResizable(false);
-		Juego juego = new Juego(500,530, vidas, fantasmas);
+		Juego juego = new Juego(520,580, vidas, fantasmas);
 		ventana.add(juego);
 		ventana.addKeyListener(juego);
 		ventana.pack();

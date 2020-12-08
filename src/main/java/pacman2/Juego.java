@@ -18,7 +18,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private int cantVidas;
 	@SuppressWarnings("unused")
 	private int cantidadFantasmas;
-	private int[] screendata = new int[256];
+	private int[] screendata = new int[400];
 	
 	
 
@@ -47,7 +47,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	
     private void iniciarJuego() {
     	this.pacman = new Pacman(cantVidas, screendata);
-    	sonidos.repetirSonido("music");
+    	//sonidos.repetirSonido("music");
     }
     
 	protected void actualizarJuego() {

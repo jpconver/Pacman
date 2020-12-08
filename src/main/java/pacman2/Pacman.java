@@ -38,8 +38,8 @@ public class Pacman extends Laberinto {
 	private void cargarSonidos() {
         try {
             sonidos = new Sonidos();
-            sonidos.agregarSonido("eat-dot", "sounds/eating-dot.wav");
-            sonidos.agregarSonido("eat-cherry", "sounds/eating-cherry.wav");
+            //sonidos.agregarSonido("eat-dot", "sounds/eating-dot.wav");
+            //sonidos.agregarSonido("eat-cherry", "sounds/eating-cherry.wav");
         } catch (Exception e1) {
             throw new RuntimeException(e1);
         }
