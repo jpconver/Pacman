@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class Imagenes {
 
-	protected static Image loadImage(String resourceName) {
+	public static Image loadImage(String resourceName) {
 		try {
 			URI uri = ClassLoader.getSystemResource(resourceName).toURI();
 			String mainPath = Paths.get(uri).toString();
