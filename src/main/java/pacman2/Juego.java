@@ -16,14 +16,21 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private final static int WELCOME_SCREEN = 1;
 	private final static int GAME_SCREEN = 2;
 	private final static int THANKS_SCREEN = 3;
+	private final static int LOSTLIFE_SCREEN = 4;
 	private Image pantallaBienvenida = Imagenes.loadImage("images/pantallaIntro.png");
 	private Image pantallaGraciasxJugar = Imagenes.loadImage("images/pantallaGracias.png");
+	private Image pantallaVidaPerdida = Imagenes.loadImage("images/pantallaIntro.png");
 	private Laberinto laberinto;
 	private Pacman pacman;
 	private Ghost ghost;
+	private Ghostblue ghostblue;
+	private Ghostgreen ghostgreen;
 	private Score score;
 	private Lifes vidas;
 	private Sonidos sonidos;
+	private boolean colisionred = false;
+	private boolean colisionblue = false;
+	private boolean colisiongreen = false;
 	private int anchoJuego;
 	private int altoJuego;
 	int cantVidas;
@@ -31,6 +38,8 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	static int puntaje = 0;
 	private int cantidadFantasmas;
 	private int[] screendata = new int[400];
+	private int pacmanx;
+	private int pacmany;
 	
 
 	public Juego(int anchoJuego, int altoJuego, int vidas, int fantasmas) {
@@ -44,6 +53,8 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
 		this.score = new Score(anchoJuego, altoJuego);
 		this.ghost = new Ghost(screendata, cantidadFantasmas, pantalla);
+		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
+		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
 		cargarSonidos();
 		iniciarVariables();
 		//sonidos.repetirSonido("music");
@@ -59,7 +70,6 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 				screendata[i] = laberinto.level_2[i];
 			}
 		}
-		ghost.iniciarVariables();
 	}
 
 	@Override
@@ -67,23 +77,31 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		return new Dimension(anchoJuego, altoJuego);
 	}
 
-	protected void actualizarJuego(Graphics2D g2d) {
-		chequearLaberinto();
+	protected void actualizarJuego() {
+		
 		pacman.moverPacman();
-		ghost.moveGhosts(g2d);
+		this.pacmanx = pacman.getPacmanx();
+		this.pacmany = pacman.getPacmany();
+		colisionred = ghost.moveGhosts(pacmanx, pacmany);
+		colisionblue = ghostblue.moveGhosts(pacmanx, pacmany, cantVidas);
+		colisiongreen = ghostgreen.moveGhosts(pacmanx, pacmany, cantVidas);
+		chequearLaberinto();
+		
 	}
 
 	private void chequearLaberinto() {
+		
 		int i = 0;
 		boolean completado = true;
 
-		while (i < laberinto.nrofblocks * laberinto.nrofblocks && completado) {
+		while (i < screendata.length && completado) {
 
 			if ((screendata[i] & 48) != 0) {
 				completado = false;
 			}
 			i++;
 		}
+		
 		if (completado && level == 2) {
 			pantalla = THANKS_SCREEN;
 		} else if (completado) {
@@ -93,6 +111,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 	}
 
+
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -101,13 +120,20 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			dibujarPantalla(g2d, pantallaBienvenida);
 			mostrarMensaje(g2d);
 		}
-		if (pantalla == GAME_SCREEN) {
+		if (pantalla == GAME_SCREEN && (colisionred || colisiongreen || colisionblue )) {
+			pantalla = LOSTLIFE_SCREEN;
+			dibujarPantalla(g2d, pantallaVidaPerdida);
+			mostrarMensaje(g2d);
+			
+		} else if (pantalla == GAME_SCREEN) {
 			super.paintComponent(g2d);
 			pacman.paint(g2d);
 			laberinto.dibujarLaberinto(g2d);
 			score.drawScore(g2d);
 			vidas.drawLifes(g2d);
 			ghost.drawGhost(g2d);
+			ghostblue.drawGhost(g2d);
+			ghostgreen.drawGhost(g2d);
 		}
 		if (pantalla == THANKS_SCREEN) {
 			dibujarPantalla(g2d, pantallaGraciasxJugar);
@@ -116,17 +142,21 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 
 	private void mostrarMensaje(Graphics2D g2d) {
 		g2d.setColor(new Color(0, 0, 0));
-		g2d.fillRect(60, altoJuego - 120, anchoJuego - 140, 50);
+		g2d.fillRect(60, altoJuego - 120, anchoJuego - 130, 50);
 		g2d.setColor(Color.white);
-		g2d.drawRect(60, altoJuego - 120, anchoJuego - 140, 50);
+		g2d.drawRect(60, altoJuego - 120, anchoJuego - 130, 50);
 		String mensaje = "Presiona la Barra espaciadora para Iniciar";
 		String nextLevel = "Lo haz logrado! Listo para el proximo nivel ?";
+		String vidaperdida = "¡Perdiste una vida! Espacio para jugar otra vez";
 		Font small = new Font("Comic Sans MS", Font.PLAIN, 18);
 		g2d.setFont(small);
-		if (level == 1)
+		if(colisionred || colisionblue || colisiongreen) {
+			g2d.drawString(vidaperdida, 67, 492);
+		} else if (level == 1) {
 			g2d.drawString(mensaje, 82, 492);
-		if (level == 2)
+		} else if (level == 2) {
 			g2d.drawString(nextLevel, 70, 492);
+		}
 	}
 
 	private void dibujarPantalla(Graphics g, Image screen) {
@@ -161,12 +191,12 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			pantalla = GAME_SCREEN;
+			
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
 	}
 
 	@Override
@@ -177,20 +207,26 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	public Laberinto getLaberinto() {
 		return laberinto;
 	}
-
+	
+	private void dibujarJuego() {
+		this.repaint();
+	}
 	@Override
 	public void run() {
 		while (true) {
-			if (pantalla == WELCOME_SCREEN) {
-			}else {
-				actualizarJuego(null);
-				repaint();
+			if (pantalla == GAME_SCREEN) {
+				actualizarJuego();
 			}
-			try {
-				Thread.sleep(16);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			dibujarJuego();
+			esperar(15);
+		}
+	}
+
+	private void esperar(int milisegundos) {
+		try {
+			Thread.sleep(milisegundos);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

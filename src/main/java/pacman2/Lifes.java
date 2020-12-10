@@ -25,8 +25,16 @@ public class Lifes{
 		for (int i = 0; i < vidas ; i++) {
             g.drawImage(pacman2left, ancho - 500 + i * 30, alto - 35, null);
         }
-	}
+	}	
 	
+	public int getVidas() {
+		return vidas;
+	}
+
+	public void setVidas(int vidas) {
+		this.vidas = vidas;
+	}
+
 	void perderVida() {
 		vidas--;
 	}

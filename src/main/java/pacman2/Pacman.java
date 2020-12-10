@@ -13,6 +13,28 @@ public class Pacman extends Laberinto {
 	int viewdx = 0; // Direcion a la que mira el pacman
 	int viewdy = 0; // Dirrecion a la que mira el pacman
 	int pacmanspeed = 2;
+	int xpacman;
+	int ypacman;
+	Ghost ghost;
+
+	public int getPacmanx() {
+		return pacmanx;
+	}
+
+
+	public void setPacmanx(int pacmanx) {
+		this.pacmanx = pacmanx;
+	}
+
+
+	public int getPacmany() {
+		return pacmany;
+	}
+
+
+	public void setPacmany(int pacmany) {
+		this.pacmany = pacmany;
+	}
 
 	Sonidos sonidos;
 	private final int pacmandelay = 4;
@@ -85,7 +107,7 @@ public class Pacman extends Laberinto {
 				Juego.puntaje += 20;
 				 //sonidos.tocarSonido("eat-cherry");
 			}
-			if (reqdx != 0 || reqdy != 0) {
+ 			if (reqdx != 0 || reqdy != 0) {
 				if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0) || (reqdx == 1 && reqdy == 0 && (ch & 4) != 0)
 						|| (reqdx == 0 && reqdy == -1 && (ch & 2) != 0)
 						|| (reqdx == 0 && reqdy == 1 && (ch & 8) != 0))) {
@@ -104,7 +126,12 @@ public class Pacman extends Laberinto {
 		}
 		pacmanx = pacmanx + pacmanspeed * pacmandx;
 		pacmany = pacmany + pacmanspeed * pacmandy;
-
+		
+		setPacmanx(pacmanx);
+		setPacmany(pacmany);
+		
+		//System.out.println("X:"+pacmanx + " Y:" + pacmany);
+		//ghost.moveGhosts(getPacmanx(), getPacmany());
 	}
 
 	void paint(Graphics2D g2d) {
