@@ -1,10 +1,6 @@
 "#ProyectoParadigmaIFTS16" 
 
 Juego Pacman en Java
-![Imagen de pantalla principal]
-https://raw.github.com/lboniardi/Pacman/tree/main/src/main/resources/images/Juego1.png
-![Imagen de juego]
-https://github.com/lboniardi/Pacman/tree/main/src/main/resources/images/Juego2.png
 
 Lucas Boniardi
 Marcos Gutierrez
