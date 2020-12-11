@@ -64,7 +64,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 		cargarSonidos();
 		iniciarVariables();
-		//sonidos.repetirSonido("music");
+		sonidos.repetirSonido("music");
 	}
 
 	private void iniciarVariables() {
@@ -112,9 +112,11 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
 			if(cantVidas == 1) {
+				sonidos.tocarSonido("d");
 				pantalla = GAMEOVER_SCREEN;
 				level = 1;
 			} else {
+				sonidos.tocarSonido("die");
 				cantVidas--;
 				crearEntidades();
 			}
@@ -137,6 +139,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas, level);
 		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
+		this.score = new Score(anchoJuego, altoJuego);
 	}
 
 	@Override
@@ -148,6 +151,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			mostrarMensaje(g2d);
 		}
 		if (pantalla == GAMEOVER_SCREEN) {
+			puntaje = 0;
 			dibujarPantalla(g2d, pantallaGameOver);
 			mostrarMensaje(g2d);
 		}
@@ -263,6 +267,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		try {
 			sonidos = new Sonidos();
 			sonidos.agregarSonido("music", "sounds/pacman-theme.wav");
+			sonidos.agregarSonido("die", "sounds/pacman-dies.wav");
 		} catch (Exception e1) {
 			throw new RuntimeException(e1);
 		}
