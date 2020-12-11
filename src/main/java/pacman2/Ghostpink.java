@@ -9,7 +9,6 @@ public class Ghostpink extends Laberinto {
 	// private int pantalla;
 	Image fantasmarosa;
 	//private int maxghosts = 1;
-	Lifes lifes;
 	private int ghostx = 11 * blocksize;
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;

@@ -9,7 +9,6 @@ public class Ghostgreen extends Laberinto {
 	// private int pantalla;
 	Image fantasmaverde;
 	//private int maxghosts = 1;
-	Lifes lifes;
 	private int ghostx = 8 * blocksize;
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;

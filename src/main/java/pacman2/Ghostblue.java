@@ -9,7 +9,6 @@ public class Ghostblue extends Laberinto {
 	// private int pantalla;
 	Image fantasmaazul;
 	//private int maxghosts = 1;
-	Lifes lifes;
 	private int ghostx = 9 * blocksize;
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;

@@ -125,6 +125,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		} else if (completado) {
 			crearEntidades();
 			pantalla = WELCOME_SCREEN;
+			puntaje += 100;
 			level++;
 			
 			iniciarVariables();

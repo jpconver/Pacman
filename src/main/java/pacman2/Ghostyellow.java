@@ -9,7 +9,6 @@ public class Ghostyellow extends Laberinto {
 	// private int pantalla;
 	Image fantasmaamarillo;
 	//private int maxghosts = 1;
-	Lifes lifes;
 	private int ghostx = 10 * blocksize;
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;
