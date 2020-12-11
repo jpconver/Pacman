@@ -99,13 +99,13 @@ public class Pacman extends Laberinto {
 			if ((ch & 16) != 0) {
 				screendata[pos] = (short) (screendata[pos] - 16);
 				Juego.puntaje++;
-				 //sonidos.tocarSonido("eat-dot");
+				 sonidos.tocarSonido("eat-dot");
 			}
 
 			if ((ch & 32) != 0) {
 				screendata[pos] = (short) (screendata[pos] - 32);
 				Juego.puntaje += 20;
-				 //sonidos.tocarSonido("eat-cherry");
+				 sonidos.tocarSonido("eat-cherry");
 			}
  			if (reqdx != 0 || reqdy != 0) {
 				if (!((reqdx == -1 && reqdy == 0 && (ch & 1) != 0) || (reqdx == 1 && reqdy == 0 && (ch & 4) != 0)
@@ -130,8 +130,6 @@ public class Pacman extends Laberinto {
 		setPacmanx(pacmanx);
 		setPacmany(pacmany);
 		
-		//System.out.println("X:"+pacmanx + " Y:" + pacmany);
-		//ghost.moveGhosts(getPacmanx(), getPacmany());
 	}
 
 	void paint(Graphics2D g2d) {

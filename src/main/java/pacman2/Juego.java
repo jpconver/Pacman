@@ -63,7 +63,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 		cargarSonidos();
 		iniciarVariables();
-		//sonidos.repetirSonido("music");
+		sonidos.repetirSonido("music");
 	}
 
 	private void iniciarVariables() {
@@ -109,8 +109,14 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			}
 			i++;
 		}
-		
-		if (completado && level == 2) {
+		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
+			pantalla = LOSTLIFE_SCREEN;
+			colisionred = false;
+			colisionblue = false;
+			colisiongreen = false;
+			colisionyellow = false;
+			colisionpink = false;
+		}else if (completado && level == 2) {
 			pantalla = THANKS_SCREEN;
 		} else if (completado) {
 			pantalla = WELCOME_SCREEN;
@@ -142,6 +148,9 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 		if (pantalla == THANKS_SCREEN) {
 			dibujarPantalla(g2d, pantallaGraciasxJugar);
+		} if (pantalla == LOSTLIFE_SCREEN) {
+			dibujarPantalla(g2d, pantallaVidaPerdida);
+			mostrarMensaje(g2d);
 		}
 	}
 
