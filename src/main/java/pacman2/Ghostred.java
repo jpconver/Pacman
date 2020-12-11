@@ -19,12 +19,14 @@ public class Ghostred extends Laberinto {
 	Pacman pacman;
 	boolean colision;
 	Image fantasmaRojo;
-	private final int validspeeds[] = { 1 };
-	private int currentspeed = 0;
 
-	public Ghostred(int[] screendata, int cantidadFantasmas) {
+	
+	int level;
+	
+	public Ghostred(int[] screendata, int cantidadFantasmas, int level) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
+		this.level = level;
 		iniciarVariables();
 		fantasmarojo = Imagenes.loadImage("sprites/ghostred.png");
 	}
@@ -32,7 +34,6 @@ public class Ghostred extends Laberinto {
 	void iniciarVariables() {
 		int i;
 		int dx = 1;
-		int random;
 
 		for (i = 0; i < cantidadFantasmas; i++) {
 			ghostx[i] = 7 * blocksize;
@@ -40,9 +41,8 @@ public class Ghostred extends Laberinto {
 			ghostdy[i] = 0;
 			ghostdx[i] = dx;
 			dx = -dx;
-			random = (int) Math.random();
 
-			ghostspeed[i] = validspeeds[random];
+			ghostspeed[i] = level;
 		}
 	}
 

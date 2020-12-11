@@ -14,6 +14,7 @@ public class Ghostgreen extends Laberinto {
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;
 	private int ghostdy;
+	int level;
 	private int ghostspeed = 1;
 	private int[] dx = new int[4];
 	private int[] dy = new int[4];
@@ -22,9 +23,11 @@ public class Ghostgreen extends Laberinto {
 	boolean colision;
 	//private final int validspeeds[] = { 1, 1 };
 
-	public Ghostgreen(int[] screendata, int cantidadFantasmas) {
+
+	public Ghostgreen(int[] screendata, int cantidadFantasmas, int level) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
+		this.level = level;
 		iniciarVariables();
 		fantasmaverde = Imagenes.loadImage("sprites/ghostgreen.png");
 	}

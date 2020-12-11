@@ -14,17 +14,19 @@ public class Ghostblue extends Laberinto {
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;
 	private int ghostdy;
+	int level;
 	private int ghostspeed = 1;
 	private int[] dx = new int[4];
 	private int[] dy = new int[4];
 	private int ghostX, ghostY;
 	Pacman pacman;
 	boolean colision;
-	private final int validspeeds[] = { 0, 0 };
+	
 
-	public Ghostblue(int[] screendata, int cantidadFantasmas) {
+	public Ghostblue(int[] screendata, int cantidadFantasmas, int level) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
+		this.level = level;
 		iniciarVariables();
 		fantasmaazul = Imagenes.loadImage("sprites/ghostblue.png");
 	}
@@ -34,6 +36,7 @@ public class Ghostblue extends Laberinto {
 		ghostdy = 0;
 		ghostdx = dx;
 		dx = -dx;
+		
 	}
 
 	boolean moveGhosts(int pacmanx, int pacmany, int vidas) {

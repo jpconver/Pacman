@@ -57,9 +57,9 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.pacman = new Pacman(screendata);
 		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
 		this.score = new Score(anchoJuego, altoJuego);
-		this.ghostred = new Ghostred(screendata, cantidadFantasmas);
-		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
-		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
+		this.ghostred = new Ghostred(screendata, cantidadFantasmas, level);
+		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas, level);
+		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas, level);
 		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 		cargarSonidos();
@@ -132,9 +132,9 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private void crearEntidades() {
 		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
 		this.pacman = new Pacman(screendata);
-		this.ghostred = new Ghostred(screendata, cantidadFantasmas);
-		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
-		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
+		this.ghostred = new Ghostred(screendata, cantidadFantasmas, level);
+		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas, level);
+		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas, level);
 		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 	}
