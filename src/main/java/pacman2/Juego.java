@@ -110,7 +110,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			i++;
 		}
 		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
-			pantalla = LOSTLIFE_SCREEN;
+			this.pacman = new Pacman(screendata);
 			colisionred = false;
 			colisionblue = false;
 			colisiongreen = false;
@@ -148,10 +148,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 		if (pantalla == THANKS_SCREEN) {
 			dibujarPantalla(g2d, pantallaGraciasxJugar);
-		} if (pantalla == LOSTLIFE_SCREEN) {
-			dibujarPantalla(g2d, pantallaVidaPerdida);
-			mostrarMensaje(g2d);
-		}
+		} 
 	}
 
 	private void mostrarMensaje(Graphics2D g2d) {
