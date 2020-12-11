@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 
 public class Pacman extends Laberinto {
 	int pantalla;
-	int pacmanx = 7 * blocksize; // Posicion Pacman
-	int pacmany = 10 * blocksize; // Posicion Pacman
+	int pacmanx = 0 * blocksize; // Posicion Pacman
+	int pacmany = 0 * blocksize; // Posicion Pacman
 	int reqdx = 0; // Direccion de movimiento pacman
 	int reqdy = 0; // Direccion de movimiento pacman
 	int pacmandx = 0; // Direccion de movimiento pacman
@@ -15,7 +15,7 @@ public class Pacman extends Laberinto {
 	int pacmanspeed = 2;
 	int xpacman;
 	int ypacman;
-	Ghost ghost;
+	Ghostred ghost;
 
 	public int getPacmanx() {
 		return pacmanx;

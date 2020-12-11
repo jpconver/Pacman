@@ -3,7 +3,7 @@ package pacman2;
 import java.awt.Graphics;
 import java.awt.Image;
 
-public class Ghost extends Laberinto {
+public class Ghostred extends Laberinto {
 
 	private int cantidadFantasmas;
 	// private int pantalla;
@@ -25,7 +25,7 @@ public class Ghost extends Laberinto {
 	private int currentspeed = 0;
 	private int pantalla;
 
-	public Ghost(int[] screendata, int cantidadFantasmas, int pantalla) {
+	public Ghostred(int[] screendata, int cantidadFantasmas, int pantalla) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
 		this.pantalla = pantalla;
@@ -39,7 +39,7 @@ public class Ghost extends Laberinto {
 		int random;
 
 		for (i = 0; i < cantidadFantasmas; i++) {
-			ghostx[i] = 12 * blocksize;
+			ghostx[i] = 7 * blocksize;
 			ghosty[i] = 10 * blocksize;
 			ghostdy[i] = 0;
 			ghostdx[i] = dx;

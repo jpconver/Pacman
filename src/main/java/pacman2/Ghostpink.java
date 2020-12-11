@@ -3,14 +3,14 @@ package pacman2;
 import java.awt.Graphics;
 import java.awt.Image;
 
-public class Ghostgreen extends Laberinto {
+public class Ghostpink extends Laberinto {
 
 	private int cantidadFantasmas;
 	// private int pantalla;
-	Image fantasmaverde;
+	Image fantasmarosa;
 	//private int maxghosts = 1;
 	Lifes lifes;
-	private int ghostx = 8 * blocksize;
+	private int ghostx = 11 * blocksize;
 	private int ghostdx;  
 	private int ghosty = 10 * blocksize;
 	private int ghostdy;
@@ -22,11 +22,11 @@ public class Ghostgreen extends Laberinto {
 	boolean colision;
 	//private final int validspeeds[] = { 1, 1 };
 
-	public Ghostgreen(int[] screendata, int cantidadFantasmas) {
+	public Ghostpink(int[] screendata, int cantidadFantasmas) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
 		iniciarVariables();
-		fantasmaverde = Imagenes.loadImage("sprites/ghostgreen.png");
+		fantasmarosa = Imagenes.loadImage("sprites/ghostpink.png");
 	}
 
 	void iniciarVariables() {
@@ -120,7 +120,7 @@ public class Ghostgreen extends Laberinto {
 	
 	public void drawGhost(Graphics g2d) {
 		for (int i = 0; i < cantidadFantasmas; i++) {
-			g2d.drawImage(fantasmaverde, ghostX, ghostY, null);
+			g2d.drawImage(fantasmarosa, ghostX, ghostY, null);
 		}
 	}
 

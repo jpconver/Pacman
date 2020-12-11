@@ -22,15 +22,19 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private Image pantallaVidaPerdida = Imagenes.loadImage("images/pantallaIntro.png");
 	private Laberinto laberinto;
 	private Pacman pacman;
-	private Ghost ghost;
+	private Ghostred ghostred;
 	private Ghostblue ghostblue;
 	private Ghostgreen ghostgreen;
+	private Ghostyellow ghostyellow;
+	private Ghostpink ghostpink;
 	private Score score;
 	private Lifes vidas;
 	private Sonidos sonidos;
 	private boolean colisionred = false;
 	private boolean colisionblue = false;
 	private boolean colisiongreen = false;
+	private boolean colisionyellow = false;
+	private boolean colisionpink = false;
 	private int anchoJuego;
 	private int altoJuego;
 	int cantVidas;
@@ -52,9 +56,11 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.pacman = new Pacman(screendata);
 		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
 		this.score = new Score(anchoJuego, altoJuego);
-		this.ghost = new Ghost(screendata, cantidadFantasmas, pantalla);
+		this.ghostred = new Ghostred(screendata, cantidadFantasmas, pantalla);
 		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
 		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
+		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
+		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 		cargarSonidos();
 		iniciarVariables();
 		//sonidos.repetirSonido("music");
@@ -82,9 +88,11 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		pacman.moverPacman();
 		this.pacmanx = pacman.getPacmanx();
 		this.pacmany = pacman.getPacmany();
-		colisionred = ghost.moveGhosts(pacmanx, pacmany);
+		colisionred = ghostred.moveGhosts(pacmanx, pacmany);
 		colisionblue = ghostblue.moveGhosts(pacmanx, pacmany, cantVidas);
 		colisiongreen = ghostgreen.moveGhosts(pacmanx, pacmany, cantVidas);
+		colisionyellow = ghostyellow.moveGhosts(pacmanx, pacmany, cantVidas);
+		colisionpink = ghostpink.moveGhosts(pacmanx, pacmany, cantVidas);
 		chequearLaberinto();
 		
 	}
@@ -120,20 +128,17 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			dibujarPantalla(g2d, pantallaBienvenida);
 			mostrarMensaje(g2d);
 		}
-		if (pantalla == GAME_SCREEN && (colisionred || colisiongreen || colisionblue )) {
-			pantalla = LOSTLIFE_SCREEN;
-			dibujarPantalla(g2d, pantallaVidaPerdida);
-			mostrarMensaje(g2d);
-			
-		} else if (pantalla == GAME_SCREEN) {
+		if (pantalla == GAME_SCREEN) {
 			super.paintComponent(g2d);
 			pacman.paint(g2d);
 			laberinto.dibujarLaberinto(g2d);
 			score.drawScore(g2d);
 			vidas.drawLifes(g2d);
-			ghost.drawGhost(g2d);
+			ghostred.drawGhost(g2d);
 			ghostblue.drawGhost(g2d);
 			ghostgreen.drawGhost(g2d);
+			ghostyellow.drawGhost(g2d);
+			ghostpink.drawGhost(g2d);
 		}
 		if (pantalla == THANKS_SCREEN) {
 			dibujarPantalla(g2d, pantallaGraciasxJugar);
@@ -150,7 +155,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		String vidaperdida = "¡Perdiste una vida! Espacio para jugar otra vez";
 		Font small = new Font("Comic Sans MS", Font.PLAIN, 18);
 		g2d.setFont(small);
-		if(colisionred || colisionblue || colisiongreen) {
+		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
 			g2d.drawString(vidaperdida, 67, 492);
 		} else if (level == 1) {
 			g2d.drawString(mensaje, 82, 492);
