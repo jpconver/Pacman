@@ -19,7 +19,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private final static int GAMEOVER_SCREEN = 4;
 	private Image pantallaBienvenida = Imagenes.loadImage("images/pantallaIntro.png");
 	private Image pantallaGraciasxJugar = Imagenes.loadImage("images/pantallaGracias.png");
-	private Image pantallaGameOver = Imagenes.loadImage("images/pantallaIntro.png");
+	private Image pantallaGameOver = Imagenes.loadImage("images/pantallaGameOver.png");
 	private Laberinto laberinto;
 	private Pacman pacman;
 	private Ghostred ghostred;
@@ -64,7 +64,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
 		cargarSonidos();
 		iniciarVariables();
-		sonidos.repetirSonido("music");
+		//sonidos.repetirSonido("music");
 	}
 
 	private void iniciarVariables() {
@@ -111,13 +111,13 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			i++;
 		}
 		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
-			if(cantVidas != 0) {
+			if(cantVidas == 1) {
+				pantalla = GAMEOVER_SCREEN;
+				level = 1;
+			} else {
 				cantVidas--;
 				crearEntidades();
-			} else {
-				pantalla = GAMEOVER_SCREEN;
 			}
-			System.out.println(cantVidas);
 		}else if (completado && level == 2) {
 			pantalla = THANKS_SCREEN;
 		} else if (completado) {
@@ -149,6 +149,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		}
 		if (pantalla == GAMEOVER_SCREEN) {
 			dibujarPantalla(g2d, pantallaGameOver);
+			mostrarMensaje(g2d);
 		}
 		if (pantalla == GAME_SCREEN) {
 			super.paintComponent(g2d);
@@ -169,17 +170,17 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 
 	private void mostrarMensaje(Graphics2D g2d) {
 		g2d.setColor(new Color(0, 0, 0));
-		g2d.fillRect(60, altoJuego - 120, anchoJuego - 130, 50);
+		g2d.fillRect(60, altoJuego - 565, anchoJuego - 130, 50);
 		g2d.setColor(Color.white);
-		g2d.drawRect(60, altoJuego - 120, anchoJuego - 130, 50);
+		g2d.drawRect(60, altoJuego - 565, anchoJuego - 130, 50);
 		String mensaje = "Presiona la Barra espaciadora para Iniciar";
 		String nextLevel = "Nivel Superado! Listo para el proximo nivel?";
 		Font small = new Font("Comic Sans MS", Font.PLAIN, 18);
 		g2d.setFont(small);
 		if (level == 1) {
-			g2d.drawString(mensaje, anchoJuego - 430, 492);
+			g2d.drawString(mensaje, anchoJuego - 430, 45);
 		} else if (level == 2) {
-			g2d.drawString(nextLevel, anchoJuego - 440, 492);
+			g2d.drawString(nextLevel, anchoJuego - 440, 45);
 		}
 	}
 
@@ -213,10 +214,13 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			pacman.reqdy = -1;
 			pacman.reqdx = 0;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		if (e.getKeyCode() == KeyEvent.VK_SPACE && pantalla == GAMEOVER_SCREEN) {
+			this.cantVidas = 4;
+			iniciarVariables();
 			pantalla = GAME_SCREEN;
-			
-		}
+		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			pantalla = GAME_SCREEN;
+		} 
 	}
 
 	@Override
