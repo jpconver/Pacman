@@ -16,10 +16,10 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	private final static int WELCOME_SCREEN = 1;
 	private final static int GAME_SCREEN = 2;
 	private final static int THANKS_SCREEN = 3;
-	private final static int LOSTLIFE_SCREEN = 4;
+	private final static int GAMEOVER_SCREEN = 4;
 	private Image pantallaBienvenida = Imagenes.loadImage("images/pantallaIntro.png");
 	private Image pantallaGraciasxJugar = Imagenes.loadImage("images/pantallaGracias.png");
-	private Image pantallaVidaPerdida = Imagenes.loadImage("images/pantallaIntro.png");
+	private Image pantallaGameOver = Imagenes.loadImage("images/pantallaIntro.png");
 	private Laberinto laberinto;
 	private Pacman pacman;
 	private Ghostred ghostred;
@@ -53,10 +53,11 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		this.altoJuego = altoJuego;
 		this.cantVidas = vidas;
 		this.cantidadFantasmas = fantasmas;
+		crearEntidades();
 		this.pacman = new Pacman(screendata);
 		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
 		this.score = new Score(anchoJuego, altoJuego);
-		this.ghostred = new Ghostred(screendata, cantidadFantasmas, pantalla);
+		this.ghostred = new Ghostred(screendata, cantidadFantasmas);
 		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
 		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
 		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
@@ -110,21 +111,33 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 			i++;
 		}
 		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
-			this.pacman = new Pacman(screendata);
-			colisionred = false;
-			colisionblue = false;
-			colisiongreen = false;
-			colisionyellow = false;
-			colisionpink = false;
+			if(cantVidas != 0) {
+				cantVidas--;
+				crearEntidades();
+			} else {
+				pantalla = GAMEOVER_SCREEN;
+			}
+			System.out.println(cantVidas);
 		}else if (completado && level == 2) {
 			pantalla = THANKS_SCREEN;
 		} else if (completado) {
+			crearEntidades();
 			pantalla = WELCOME_SCREEN;
 			level++;
+			
 			iniciarVariables();
 		}
 	}
 
+	private void crearEntidades() {
+		this.vidas = new Lifes(cantVidas, anchoJuego, altoJuego);
+		this.pacman = new Pacman(screendata);
+		this.ghostred = new Ghostred(screendata, cantidadFantasmas);
+		this.ghostblue = new Ghostblue(screendata, cantidadFantasmas);
+		this.ghostgreen = new Ghostgreen(screendata, cantidadFantasmas);
+		this.ghostyellow = new Ghostyellow(screendata, cantidadFantasmas);
+		this.ghostpink = new Ghostpink(screendata, cantidadFantasmas);
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -133,6 +146,9 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		if (pantalla == WELCOME_SCREEN) {
 			dibujarPantalla(g2d, pantallaBienvenida);
 			mostrarMensaje(g2d);
+		}
+		if (pantalla == GAMEOVER_SCREEN) {
+			dibujarPantalla(g2d, pantallaGameOver);
 		}
 		if (pantalla == GAME_SCREEN) {
 			super.paintComponent(g2d);
@@ -157,16 +173,13 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 		g2d.setColor(Color.white);
 		g2d.drawRect(60, altoJuego - 120, anchoJuego - 130, 50);
 		String mensaje = "Presiona la Barra espaciadora para Iniciar";
-		String nextLevel = "Lo haz logrado! Listo para el proximo nivel ?";
-		String vidaperdida = "¡Perdiste una vida! Espacio para jugar otra vez";
+		String nextLevel = "Nivel Superado! Listo para el proximo nivel?";
 		Font small = new Font("Comic Sans MS", Font.PLAIN, 18);
 		g2d.setFont(small);
-		if(colisionred || colisionblue || colisiongreen || colisionyellow || colisionpink) {
-			g2d.drawString(vidaperdida, 67, 492);
-		} else if (level == 1) {
-			g2d.drawString(mensaje, 82, 492);
+		if (level == 1) {
+			g2d.drawString(mensaje, anchoJuego - 430, 492);
 		} else if (level == 2) {
-			g2d.drawString(nextLevel, 70, 492);
+			g2d.drawString(nextLevel, anchoJuego - 440, 492);
 		}
 	}
 
@@ -226,6 +239,7 @@ public class Juego extends JPanel implements KeyListener, Runnable {
 	public void run() {
 		while (true) {
 			if (pantalla == GAME_SCREEN) {
+				
 				actualizarJuego();
 			}
 			dibujarJuego();

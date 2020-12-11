@@ -20,7 +20,7 @@ public class Ghostpink extends Laberinto {
 	private int ghostX, ghostY;
 	Pacman pacman;
 	boolean colision;
-	//private final int validspeeds[] = { 1, 1 };
+	//private final int validspeeds[] = {};
 
 	public Ghostpink(int[] screendata, int cantidadFantasmas) {
 		super(screendata);
@@ -36,8 +36,7 @@ public class Ghostpink extends Laberinto {
 		ghostdx = dx;
 		dx = -dx;
 		random = (int) (Math.random());
-
-			//ghostspeed = validspeeds[random];
+			ghostspeed = 1;
 	}
 
 	boolean moveGhosts(int pacmanx, int pacmany, int vidas) {

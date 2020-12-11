@@ -6,7 +6,6 @@ import java.awt.Image;
 public class Ghostred extends Laberinto {
 
 	private int cantidadFantasmas;
-	// private int pantalla;
 	Image fantasmarojo;
 	private int maxghosts = 1;
 	private int[] ghostx = new int[maxghosts];
@@ -17,18 +16,15 @@ public class Ghostred extends Laberinto {
 	private int[] dx = new int[4];
 	private int[] dy = new int[4];
 	private int ghostX, ghostY;
-	private int r= 0;
 	Pacman pacman;
 	boolean colision;
 	Image fantasmaRojo;
-	private final int validspeeds[] = { 1, 1 };
+	private final int validspeeds[] = { 1 };
 	private int currentspeed = 0;
-	private int pantalla;
 
-	public Ghostred(int[] screendata, int cantidadFantasmas, int pantalla) {
+	public Ghostred(int[] screendata, int cantidadFantasmas) {
 		super(screendata);
 		this.cantidadFantasmas = cantidadFantasmas;
-		this.pantalla = pantalla;
 		iniciarVariables();
 		fantasmarojo = Imagenes.loadImage("sprites/ghostred.png");
 	}
@@ -44,7 +40,7 @@ public class Ghostred extends Laberinto {
 			ghostdy[i] = 0;
 			ghostdx[i] = dx;
 			dx = -dx;
-			random = (int) (Math.random() * (currentspeed));
+			random = (int) Math.random();
 
 			ghostspeed[i] = validspeeds[random];
 		}
